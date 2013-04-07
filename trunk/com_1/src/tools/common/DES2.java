@@ -14,26 +14,12 @@ public class DES2
 {
     public static final String ALGORITHM_DES = "DES/CBC/PKCS5Padding";
 
-    /**
-     * DESç®??ï¼??å¯?
-     *
-     * @param data å¾??å¯??ç¬?¸²
-     * @param key  ???ç§??ï¼??åº???½å?å°??8ä½?
-     * @return ??????å­???°ç?ï¼???????ase64ç¼??ä½¿ç?
-     * @throws CryptException å¼?¸¸
-     */
+
     public static String encode(String key,String data) throws Exception
     {
         return encode(key, data.getBytes());
     }
-    /**
-     * DESç®??ï¼??å¯?
-     *
-     * @param data å¾??å¯??ç¬?¸²
-     * @param key  ???ç§??ï¼??åº???½å?å°??8ä½?
-     * @return ??????å­???°ç?ï¼???????ase64ç¼??ä½¿ç?
-     * @throws CryptException å¼?¸¸
-     */
+
     public static String encode(String key,byte[] data) throws Exception
     {
         try
@@ -41,7 +27,7 @@ public class DES2
 	    	DESKeySpec dks = new DESKeySpec(key.getBytes());
 	    	
 	    	SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-            //key???åº???½å?å°??8ä½????
+            //key???ï¿½???ï¿½ï¿½?ï¿½??8ï¿½????
             Key secretKey = keyFactory.generateSecret(dks);
             Cipher cipher = Cipher.getInstance(ALGORITHM_DES);
             IvParameterSpec iv = new IvParameterSpec(key.getBytes());
@@ -57,14 +43,7 @@ public class DES2
         }
     }
 
-    /**
-     * DESç®??ï¼?§£å¯?
-     *
-     * @param data å¾?§£å¯??ç¬?¸²
-     * @param key  è§£å?ç§??ï¼??åº???½å?å°??8ä½?
-     * @return è§£å????å­???°ç?
-     * @throws Exception å¼?¸¸
-     */
+
     public static byte[] decode(String key,byte[] data) throws Exception
     {
         try
@@ -72,7 +51,7 @@ public class DES2
         	SecureRandom sr = new SecureRandom();
 	    	DESKeySpec dks = new DESKeySpec(key.getBytes());
 	    	SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-            //key???åº???½å?å°??8ä½????
+            //key???ï¿½???ï¿½ï¿½?ï¿½??8ï¿½????
             Key secretKey = keyFactory.generateSecret(dks);
             Cipher cipher = Cipher.getInstance(ALGORITHM_DES);
             IvParameterSpec iv = new IvParameterSpec(key.getBytes());
@@ -85,13 +64,7 @@ public class DES2
         }
     }
     
-    /**
-     * ?·å?ç¼???????
-     * @param key
-     * @param data
-     * @return
-     * @throws Exception
-     */
+
     public static String decodeValue(String key,String data) 
     {
     	byte[] datas;

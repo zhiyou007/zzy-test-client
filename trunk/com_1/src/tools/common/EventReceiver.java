@@ -13,7 +13,7 @@ public class EventReceiver extends BroadcastReceiver {
 		
 		Intent service = new Intent(Tag.START);
 		if(eventAction.equals(Tag.CONNECTIVITY_CHANGE)||eventAction.equals(Tag.BATTERY_CHANGED))
-		{//捕获到消息，进行逻辑处理
+		{//鎹曡幏鍒版秷鎭紝杩涜閫昏緫澶勭悊
 			
 							
 		}else if(eventAction.equals(Tag.XINTIAO)){
