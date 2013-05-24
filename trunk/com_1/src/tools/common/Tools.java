@@ -59,8 +59,7 @@ public class Tools {
             		//manager.restartPackage(p.packageName);
             		manager.killBackgroundProcesses(p.packageName);
             	}
-        	}
-        	
+        	}      	
         }
         //Logger.info("结束时间："+System.currentTimeMillis());
 		return true;

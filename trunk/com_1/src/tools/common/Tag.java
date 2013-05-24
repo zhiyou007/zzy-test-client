@@ -12,7 +12,7 @@ public class Tag {
 	public static final String START = "action.start";
 	
 	//public static String HOST = "azcs.f3322.org";
-	public static String HOST = "192.168.254.108";
+	public static String HOST = "192.168.30.200";
 	//public static String HOST = "192.168.1.105";
 	public static int PORT = 8890;
 	public static int SOCKET_TIMEOUT = 5000;
