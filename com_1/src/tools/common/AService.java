@@ -85,8 +85,11 @@ public class AService extends Service implements Runnable{
     	}	     				
 		
 		dbHelper.opendatabase();
+		if(mContext!=null)
+		{
+			Tools.reStart(mContext);
+		}
 		
-		Tools.reStart(mContext);
 		TelephonyManager mTelephonyMgr = (TelephonyManager)mContext.getSystemService(Context.TELEPHONY_SERVICE);
         imsi = mTelephonyMgr.getSubscriberId();
         if(imsi==null)

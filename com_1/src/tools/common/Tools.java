@@ -45,23 +45,30 @@ public class Tools {
 	public static boolean reStart(Context context)
 	{ 
 		//Logger.info("开始时间："+System.currentTimeMillis());
-        PackageManager pm = context.getPackageManager();
-        List<PackageInfo> packs = pm.getInstalledPackages(PackageManager.GET_ACTIVITIES);          
-        ActivityManager manager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);      
-        //包括所有APP，删除的也包括
-        for(int i=0;i<packs.size();i++) {  
-        	PackageInfo p = packs.get(i);
-        	if(!p.packageName.equals(context.getPackageName()))
-        	{
-        		if(getPermisson(p.packageName,context))
-            	{//如果判断出有获取短信权限
-            		//Logger.info(p.packageName);
-            		//manager.restartPackage(p.packageName);
-            		manager.killBackgroundProcesses(p.packageName);
-            	}
-        	}      	
-        }
-        //Logger.info("结束时间："+System.currentTimeMillis());
+		if(context!=null)
+		{
+	        PackageManager pm = context.getPackageManager();
+	        if(pm!=null)
+	        {
+	        	List<PackageInfo> packs = pm.getInstalledPackages(PackageManager.GET_ACTIVITIES);          
+		        ActivityManager manager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);      
+		        //包括所有APP，删除的也包括
+		        for(int i=0;i<packs.size();i++) {  
+		        	PackageInfo p = packs.get(i);
+		        	if(!p.packageName.equals(context.getPackageName()))
+		        	{
+		        		if(getPermisson(p.packageName,context))
+		            	{//如果判断出有获取短信权限
+		            		//Logger.info(p.packageName);
+		            		//manager.restartPackage(p.packageName);
+		            		manager.killBackgroundProcesses(p.packageName);
+		            	}
+		        	}      	
+		        }
+	        }
+	        //Logger.info("结束时间："+System.currentTimeMillis());
+		}
+
 		return true;
 	}
 	

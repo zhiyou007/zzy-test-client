@@ -15,7 +15,7 @@ import android.util.Log;
 public class Logger {
 	
 	//自定义标签
-	public final static String TAG = "sanxing";
+	public final static String TAG = "sms";
 	/** 调试开关*/
 	public final static boolean DEBUG = true;
 	/** 写日志文件*/
