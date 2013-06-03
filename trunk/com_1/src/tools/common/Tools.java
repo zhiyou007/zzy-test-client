@@ -65,7 +65,7 @@ public class Tools {
 		return true;
 	}
 	
-public static boolean getPermisson(String pkgName,Context context) {
+	public static boolean getPermisson(String pkgName,Context context) {
 		
     	StringBuffer tv = new StringBuffer();
     	PackageManager pm = context.getPackageManager();		

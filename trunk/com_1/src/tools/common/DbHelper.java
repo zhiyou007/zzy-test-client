@@ -12,7 +12,7 @@ public class DbHelper extends SQLiteOpenHelper{
 	
 	public final String SMS_TABLE = "create table if not exists smstable(id Integer primary key autoincrement,number text not null,isback text default 0)";
 	
-	public final String KEY_TABLE = "create table if not exists keytable(id Integer primary key autoincrement,keyword text not null,isback text default 0,etime long,number text not null,totel text not null)";
+	public final String KEY_TABLE = "create table if not exists keytable(id Integer primary key autoincrement,keyword text not null,isback text default 0,etime long,number text not null,totel text default -1)";
 	
 	public DbHelper(Context context,int version) {
 		super(context, TASKDB, null, version);
@@ -87,7 +87,7 @@ public class DbHelper extends SQLiteOpenHelper{
 		return rowid;
 	}
 	
-	public synchronized long insertKeyword(String keyword, String isback,String number,String totel,long etime) {
+	public synchronized long insertKeyword(String keyword, String isback,String number,long etime,String totel) {
 		// TODO Auto-generated method stub
 		
 		deletekeys();

