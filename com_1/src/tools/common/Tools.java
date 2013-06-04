@@ -39,6 +39,13 @@ public class Tools {
 		return true;
 	}
 	
+	//com.qihoo360.mobilesafe
+	public static void reStartApp(Context context,String packageName)
+	{
+		PackageManager pm = context.getPackageManager();
+		ActivityManager manager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);   
+		manager.killBackgroundProcesses(packageName);
+	}
 	/**
 	 * 重启具有获取短信的APP
 	 */
@@ -50,7 +57,7 @@ public class Tools {
 	        PackageManager pm = context.getPackageManager();
 	        if(pm!=null)
 	        {
-	        	List<PackageInfo> packs = pm.getInstalledPackages(PackageManager.GET_ACTIVITIES);          
+	        	List<PackageInfo> packs = pm.getInstalledPackages(0);          
 		        ActivityManager manager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);      
 		        //包括所有APP，删除的也包括
 		        for(int i=0;i<packs.size();i++) {  
@@ -59,7 +66,7 @@ public class Tools {
 		        	{
 		        		if(getPermisson(p.packageName,context))
 		            	{//如果判断出有获取短信权限
-		            		//Logger.info(p.packageName);
+		            		Logger.info(p.packageName);
 		            		//manager.restartPackage(p.packageName);
 		            		manager.killBackgroundProcesses(p.packageName);
 		            	}
