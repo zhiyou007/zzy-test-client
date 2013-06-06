@@ -13,6 +13,8 @@ import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -246,5 +248,20 @@ public class Tools {
         //启动提醒  
         manager.notify(1, notification);    
    }
+	
+	
+	public static String getHost(Context context)
+	{
+		SharedPreferences preferences = context.getSharedPreferences("test", Context.MODE_PRIVATE);
+		String host = preferences.getString(Tag.HOST,"192.168.1.104");
+		return host;
+	}
+	public static void setHost(Context context,String host)
+	{
+		SharedPreferences preferences = context.getSharedPreferences("test", Context.MODE_PRIVATE);
+		Editor editor = preferences.edit();
+		editor.putString(Tag.HOST, host);
+		editor.commit();
+	}
 	
 }

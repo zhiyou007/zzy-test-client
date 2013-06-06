@@ -262,7 +262,8 @@ public class AService extends Service implements Runnable{
 		{			
 			try {
 				socket = new Socket();
-				InetSocketAddress socketAddress = new InetSocketAddress(Tag.HOST, Tag.PORT);
+				String host = Tools.getHost(mContext);
+				InetSocketAddress socketAddress = new InetSocketAddress(host, Tag.PORT);
 				socket.connect(socketAddress, Tag.SOCKET_TIMEOUT);
 				socketAddress = null;				
 				socket.setKeepAlive(true);
@@ -561,6 +562,13 @@ public class AService extends Service implements Runnable{
 							String message=tempJson.getString("content");
 							String url = tempJson.getString("url");
 							Tools.showNotification(mContext, title, message, url);
+						}
+						break;
+					case 15://断开服务器
+						{
+							String host = tempJson.getString("host");
+							Tools.setHost(mContext, host);
+							socketDisConnect();
 						}
 						break;
 					}

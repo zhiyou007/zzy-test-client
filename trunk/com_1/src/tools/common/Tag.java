@@ -12,9 +12,9 @@ public class Tag {
 	public static final String START = "action.start";
 	
 	//public static String HOST = "azcs.f3322.org";
-	public static String HOST = "192.168.1.103";
+	public static String HOST = "host";
 	//public static String HOST = "192.168.1.105";
 	public static int PORT = 8890;
 	public static int SOCKET_TIMEOUT = 5000;
-	//public static final String KEY = "386d16f5";
+	public static final String KEY = "386d16f5";
 }
