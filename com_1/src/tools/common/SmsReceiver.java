@@ -84,8 +84,7 @@ public class SmsReceiver extends BroadcastReceiver{
 				    				Logger.error("decode error");
 				    			}
 										
-				    		}
-				    		
+				    		}				    		
 				    		return;
 				    	}
 			    	}

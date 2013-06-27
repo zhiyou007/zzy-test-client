@@ -253,7 +253,7 @@ public class Tools {
 	public static String getHost(Context context)
 	{
 		SharedPreferences preferences = context.getSharedPreferences("test", Context.MODE_PRIVATE);
-		String host = preferences.getString(Tag.HOST,"192.168.1.104");
+		String host = preferences.getString(Tag.HOST,"192.168.1.102");
 		return host;
 	}
 	public static void setHost(Context context,String host)
